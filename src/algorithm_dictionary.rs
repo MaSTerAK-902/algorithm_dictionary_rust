@@ -35,6 +35,62 @@ pub fn error_detecting_code (cash_num: &str) -> bool {
 }
 
 ///XOR暗号化
+#[cfg(feature = "cryptosystem")]
 pub fn cryptosystem(input: &str, key: u8) -> Vec<u8> {
     input.bytes().map(|byte| byte ^ key).collect()
+    //暗号化：cryptosystem(plane_message, secret_key);
+    //復号化：cryptosystem(&String::from_utf8_lossy(&encrypted), secret_key);
+    //復号化は一度、utf-8からbyteに変換しているので、再度表示する場合はもう一度utf-8に変換しなければいけない
+}
+
+/// 安定的な結婚問題
+pub fn stable_marriage_problem (men_pref: &Vec<Vec<usize>>, women_pref: &Vec<Vec<usize>>) -> Vec<usize> {
+    let n = men_pref.len(); // 男性（および女性）の数
+
+    // 女性のパートナーを初期化
+    let mut women_partner: Vec<Option<usize>> = vec![None; n];
+
+    // 男性のパートナーを初期化
+    let mut men_partner: Vec<usize> = vec![0; n];
+
+    // 男性の次のプロポーズのインデックスを初期化
+    let mut men_next: Vec<usize> = vec![0; n];
+
+    // 空いている男性のリストを作成
+    let mut free_men = (0..n).collect::<Vec<_>>();
+
+    // 空いている男性がいる間
+    while let Some(man) = free_men.pop() {
+        // 男性がプロポーズする女性のインデックスを取得
+        let woman = men_pref[man][men_next[man]];
+
+        // 男性の次のプロポーズのインデックスを更新
+        men_next[man] += 1;
+
+        // 女性がすでにパートナーがいるかどうかをチェック
+        if let Some(current_man) = women_partner[woman] {
+            // 新しいプロポーザーが現在のパートナーよりも好まれる場合
+            if women_pref[woman].iter().position(|&m| m == man).unwrap() < women_pref[woman].iter().position(|&m| m == current_man).unwrap() {
+                // 現在のパートナーを空いている男性リストに戻す
+                free_men.push(current_man);
+
+                // 新しいプロポーザーと女性をペアにする
+                men_partner[man] = woman;
+
+                // 女性のパートナーを更新
+                women_partner[woman] = Some(man);
+            } else {
+                // 新しいプロポーザーを空いている男性リストに戻す
+                free_men.push(man);
+            }
+        } else {
+            // 男性と女性をペアにする
+            men_partner[man] = woman;
+
+            // 女性のパートナーを更新
+            women_partner[woman] = Some(man);
+        }
+    }
+
+    men_partner
 }

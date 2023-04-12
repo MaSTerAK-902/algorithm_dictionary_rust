@@ -1,17 +1,19 @@
-use algorithm_dictionary::cryptosystem;
+use algorithm_dictionary::stable_marriage_problem;
 
 mod algorithm_dictionary;
 fn main() {
-    let plane_message = "Hello,World!";
-    let secret_key = 123;
-    let un_key = 12;
+    let men_pref = vec![
+        vec![1, 0, 2],
+        vec![0, 1, 2],
+        vec![1, 0, 2],
+    ];
 
-    //暗号化
-    let encrypted = cryptosystem(plane_message, secret_key);
-    println!("Encrypted: {:?}", encrypted);
+    let women_pref = vec![
+        vec![2, 1, 0],
+        vec![2, 0, 1],
+        vec![1, 2, 0],
+    ];
 
-    // 復号化
-    let decrypted = cryptosystem(&String::from_utf8_lossy(&encrypted), un_key);
-    let decrypted_message = String::from_utf8(decrypted).unwrap();
-    println!("Decrypted: {:?}", decrypted_message);
+    let result = stable_marriage_problem(&men_pref, &women_pref);
+    println!("Stable marriages: {:?}", result);
 }
