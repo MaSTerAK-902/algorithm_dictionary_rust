@@ -46,18 +46,10 @@ pub fn cryptosystem(input: &str, key: u8) -> Vec<u8> {
 /// 安定的な結婚問題
 pub fn stable_marriage_problem (men_pref: &Vec<Vec<usize>>, women_pref: &Vec<Vec<usize>>) -> Vec<usize> {
     let n = men_pref.len(); // 男性（および女性）の数
-
-    // 女性のパートナーを初期化
-    let mut women_partner: Vec<Option<usize>> = vec![None; n];
-
-    // 男性のパートナーを初期化
-    let mut men_partner: Vec<usize> = vec![0; n];
-
-    // 男性の次のプロポーズのインデックスを初期化
-    let mut men_next: Vec<usize> = vec![0; n];
-
-    // 空いている男性のリストを作成
-    let mut free_men = (0..n).collect::<Vec<_>>();
+    let mut women_partner: Vec<Option<usize>> = vec![None; n]; // 女性のパートナーを初期化
+    let mut men_partner: Vec<usize> = vec![0; n]; // 男性のパートナーを初期化
+    let mut men_next: Vec<usize> = vec![0; n]; // 男性の次のプロポーズのインデックスを初期化
+    let mut free_men = (0..n).collect::<Vec<_>>();// 空いている男性のリストを作成
 
     // 空いている男性がいる間
     while let Some(man) = free_men.pop() {
