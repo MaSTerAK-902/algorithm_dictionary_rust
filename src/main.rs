@@ -1,19 +1,11 @@
-use algorithm_dictionary::stable_marriage_problem;
+use algorithm_dictionary::parse_formula;
+use algorithm_dictionary::count_isomers;
 
 mod algorithm_dictionary;
 fn main() {
-    let men_pref = vec![
-        vec![1, 0, 2],
-        vec![0, 1, 2],
-        vec![1, 0, 2],
-    ];
+    let formula = "C8H32C4fea938c732jc643j48d93";
+    let elements = parse_formula(formula).unwrap();
+    let isomer_count = count_isomers(&elements).unwrap();
 
-    let women_pref = vec![
-        vec![2, 1, 0],
-        vec![2, 0, 1],
-        vec![1, 2, 0],
-    ];
-
-    let result = stable_marriage_problem(&men_pref, &women_pref);
-    println!("Stable marriages: {:?}", result);
+    println!("{} has {} isomers.", formula, isomer_count);
 }

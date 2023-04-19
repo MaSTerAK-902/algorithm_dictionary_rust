@@ -7,12 +7,12 @@ pub fn exchange_of_values (x: &mut i32, y: &mut i32){
 }
 
 
-/// 注意: この例は教育用であり、実際の用途には最適化やエラー処理が必要です。
-/// また、このアルゴリズムは、クレジットカード番号の構造的な正当性を確認するだけであり、
-/// その他の検証（有効期限、セキュリティコード、実際のアカウントの有効性など）は行われません。
-/// 実際のシステムでは、これらの追加検証を行い、適切なセキュリティ対策を講じる必要があります。
+// 注意: この例は教育用であり、実際の用途には最適化やエラー処理が必要です。
+// また、このアルゴリズムは、クレジットカード番号の構造的な正当性を確認するだけであり、
+// その他の検証（有効期限、セキュリティコード、実際のアカウントの有効性など）は行われません。
+// 実際のシステムでは、これらの追加検証を行い、適切なセキュリティ対策を講じる必要があります。
 
-/// 誤り検出符号
+// 誤り検出符号
 #[cfg(feature = "error_detcting_code")]
 pub fn error_detecting_code (cash_num: &str) -> bool {
     let mut sum = 0; //合計値の初期化
@@ -34,7 +34,7 @@ pub fn error_detecting_code (cash_num: &str) -> bool {
     sum % 10 == 0
 }
 
-///XOR暗号化
+//XOR暗号化
 #[cfg(feature = "cryptosystem")]
 pub fn cryptosystem(input: &str, key: u8) -> Vec<u8> {
     input.bytes().map(|byte| byte ^ key).collect()
@@ -43,7 +43,8 @@ pub fn cryptosystem(input: &str, key: u8) -> Vec<u8> {
     //復号化は一度、utf-8からbyteに変換しているので、再度表示する場合はもう一度utf-8に変換しなければいけない
 }
 
-/// 安定的な結婚問題
+// 安定的な結婚問題
+#[cfg(feature = "stable_marriage_problem")]
 pub fn stable_marriage_problem (men_pref: &Vec<Vec<usize>>, women_pref: &Vec<Vec<usize>>) -> Vec<usize> {
     let n = men_pref.len(); // 男性（および女性）の数
     let mut women_partner: Vec<Option<usize>> = vec![None; n]; // 女性のパートナーを初期化
@@ -85,4 +86,49 @@ pub fn stable_marriage_problem (men_pref: &Vec<Vec<usize>>, women_pref: &Vec<Vec
     }
 
     men_partner
+}
+
+//異性体の問題
+//#[cfg(feature = "isomers")]
+pub fn parse_formula(formula: &str) -> Option<Vec<(char, u32)>> {
+    let mut elements = Vec::new();
+    let mut count = 0;
+    let mut current_element = None;
+
+    for ch in formula.chars() {
+        if ch.is_alphabetic() {
+            if let Some(element) = current_element {
+                elements.push((element, count));
+                count = 0;
+            }
+            current_element = Some(ch);
+        } else if ch.is_numeric() {
+            count = count * 10 + ch.to_digit(10).unwrap();
+        } else {
+            return None;
+        }
+    }
+
+    if let Some(element) = current_element {
+        elements.push((element, count));
+    }
+
+    Some(elements)
+}
+//#[cfg(feature = "isomers")]
+pub fn count_isomers(elements: &[(char, u32)]) -> Option<u32> {
+    let mut carbon_count = 0;
+
+    for (element, count) in elements {
+        if *element == 'C' {
+            carbon_count = *count;
+            break;
+        }
+    }
+
+    if carbon_count > 0 {
+        Some(carbon_count + 1)
+    } else {
+        None
+    }
 }
